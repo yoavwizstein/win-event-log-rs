@@ -70,7 +70,10 @@ impl fmt::Display for QueryItem {
                 if let Some(ref conditions) = self.event_data_conditions {
                     parts.push(format!("*[EventData[{conditions}]]"))
                 }
-                write!(f, "{}", parts.join("\nand\n"))?;
+                match parts.is_empty() {
+                    true => write!(f, "*")?,
+                    false => write!(f, "{}", parts.join("\nand\n"))?,
+                }
                 write!(f, "\n</{}>", self.query_item_type)
             }
             None => write!(f, ""),
