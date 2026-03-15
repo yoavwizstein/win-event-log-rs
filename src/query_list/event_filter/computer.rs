@@ -13,6 +13,6 @@ impl Computer {
 
 impl fmt::Display for Computer {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "System[@Computer = '{}']", self.name)
+        write!(f, "Computer = '{}'", self.name)
     }
 }
