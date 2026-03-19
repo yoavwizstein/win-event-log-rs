@@ -369,7 +369,7 @@ mod tests {
         let query = r#"<QueryList>
 <Query Id="0">
 <Select Path="Security">
-*[System[((Level = 0) or (Level >= 4))]]
+*[System[((Level = 0) or (Level &gt;= 4))]]
 and
 *[EventData[((Data[@Name = 'TargetUserName']) and (Data = 'SYSTEM'))]]
 </Select>

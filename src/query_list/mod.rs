@@ -22,10 +22,10 @@ impl std::fmt::Display for Comparison {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match *self {
             Comparison::Equal => write!(f, "="),
-            Comparison::GreaterThan => write!(f, ">"),
-            Comparison::LessThan => write!(f, "<"),
-            Comparison::GreaterThanOrEqual => write!(f, ">="),
-            Comparison::LessThanOrEqual => write!(f, "<="),
+            Comparison::GreaterThan => write!(f, "&gt;"),
+            Comparison::LessThan => write!(f, "&lt;"),
+            Comparison::GreaterThanOrEqual => write!(f, "&gt;="),
+            Comparison::LessThanOrEqual => write!(f, "&lt;="),
         }
     }
 }
@@ -162,7 +162,7 @@ mod tests {
             r#"<QueryList>
 <Query Id="0">
 <Select Path="Application">
-*[System[((Level = 1) or (Level >= 4))]]
+*[System[((Level = 1) or (Level &gt;= 4))]]
 </Select>
 </Query>
 </QueryList>"#
@@ -198,7 +198,7 @@ mod tests {
             r#"<QueryList>
 <Query Id="0">
 <Select Path="Security">
-*[System[((Level = 0) or (Level >= 4))]]
+*[System[((Level = 0) or (Level &gt;= 4))]]
 and
 *[EventData[((Data[@Name = 'TargetUserName'] and Data = 'SYSTEM'))]]
 </Select>

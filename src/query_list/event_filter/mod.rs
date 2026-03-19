@@ -1,3 +1,5 @@
+use chrono::{DateTime, Utc};
+
 use crate::query_list::Comparison;
 use std::fmt;
 
@@ -6,6 +8,7 @@ pub mod data;
 pub mod event;
 pub mod level;
 pub mod provider;
+pub mod time_created;
 
 #[derive(Clone)]
 pub enum SystemFilter {
@@ -13,6 +16,7 @@ pub enum SystemFilter {
     EventID(event::Event),
     Level(level::Level),
     Provider(provider::Provider),
+    TimeCreated(time_created::TimeCreated),
 }
 
 #[derive(Clone)]
@@ -53,6 +57,12 @@ impl EventFilter {
         EventFilter::System(SystemFilter::Provider(provider::Provider::new(name)))
     }
 
+    pub fn time_created(time: DateTime<Utc>, comparison: Comparison) -> EventFilter {
+        EventFilter::System(SystemFilter::TimeCreated(time_created::TimeCreated::new(
+            time, comparison,
+        )))
+    }
+
     pub fn event_data<T: Into<String>>(name: T, value: T) -> EventFilter {
         EventFilter::EventData(EventDataFilter::new(name, value))
     }
@@ -74,6 +84,7 @@ impl fmt::Display for SystemFilter {
             SystemFilter::EventID(item) => write!(f, "{}", item),
             SystemFilter::Level(item) => write!(f, "{}", item),
             SystemFilter::Provider(item) => write!(f, "{}", item),
+            SystemFilter::TimeCreated(item) => write!(f, "{}", item),
         }
     }
 }
@@ -86,6 +97,7 @@ impl fmt::Display for EventDataFilter {
 
 #[cfg(test)]
 mod tests {
+    use chrono::DateTime;
 
     #[test]
     fn complex_query() {
@@ -93,6 +105,10 @@ mod tests {
         let conditions = vec![
             Condition::filter(EventFilter::event(4624)),
             Condition::filter(EventFilter::event(1102)),
+            Condition::filter(EventFilter::time_created(
+                DateTime::from_timestamp(0, 0).unwrap(),
+                Comparison::GreaterThan,
+            )),
         ];
 
         let ql = QueryList::new()
@@ -120,7 +136,7 @@ mod tests {
             r#"<QueryList>
 <Query Id="0">
 <Select Path="Security">
-*[System[((EventID = 4624) or (EventID = 1102))]]
+*[System[((EventID = 4624) or (EventID = 1102) or (TimeCreated[@SystemTime &gt; '1970-01-01T00:00:00.000Z']))]]
 </Select>
 <Suppress Path="Security">
 *[System[(EventID = 4624)]]

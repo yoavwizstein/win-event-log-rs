@@ -13,6 +13,7 @@ default-target = "x86_64-pc-windows-gnu"
 
 [dependencies]
 bitflags = "2"
+chrono = "^0.4.38"
 lazy_static = "1.2.0"
 serde = { version = "1.0.85", optional = true, features = [ "derive" ] }
 serde_derive = { version = "1.0.85", optional = true, default-features = false }
@@ -30,3 +31,6 @@ features = ["errhandlingapi", "minwindef", "winnt", "winevt", "libloaderapi", "s
 default = ["xml"]
 xml = ["serde", "quick-xml"]
 subscriber = []
+
+[dev-dependencies]
+chrono = "^0.4.38"
